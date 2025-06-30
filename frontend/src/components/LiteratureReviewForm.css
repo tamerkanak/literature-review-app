@@ -1,0 +1,167 @@
+.literature-review-form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.literature-review-form h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.upload-info {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.dropzone {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+}
+
+.dropzone:hover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}
+
+.dropzone.active {
+  border-color: #007bff;
+  background-color: #e3f2fd;
+}
+
+.dropzone p {
+  margin: 0;
+  color: #666;
+  font-size: 1rem;
+}
+
+.uploaded-files {
+  margin-top: 20px;
+}
+
+.uploaded-files h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.file-name {
+  flex: 1;
+  font-weight: 500;
+  color: #333;
+}
+
+.file-size {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 15px;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.btn-remove:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 15px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.result-header h2 {
+  margin: 0;
+}
+
+.literature-review-content {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 6px;
+  border-left: 4px solid #007bff;
+  line-height: 1.6;
+}
+
+.literature-review-content p {
+  margin: 0 0 15px 0;
+  color: #333;
+  text-align: justify;
+}
+
+.literature-review-content p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .result-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .result-header button {
+    width: 100%;
+  }
+  
+  .dropzone {
+    padding: 20px;
+  }
+  
+  .file-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .file-size {
+    margin: 0;
+  }
+} 
