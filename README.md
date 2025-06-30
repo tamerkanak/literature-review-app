@@ -15,6 +15,7 @@ Bu uygulama, araştırmacıların ve öğrencilerin literatür taraması yazım 
 - **Atıf Sistemi**: Hangi bilgilerin hangi kaynaklardan geldiğini belirtme
 - **Çok Dilli Destek**: Türkçe ve İngilizce çıktı seçeneği
 - **Her Makale İçin Ayrı Paragraf**: Her makale için ayrı analiz
+- **Kullanıcı API Anahtarı**: Her kullanıcı kendi OpenRouter API anahtarını girebilir
 
 ## Teknolojiler
 
@@ -43,7 +44,7 @@ Bu uygulama, araştırmacıların ve öğrencilerin literatür taraması yazım 
 1. [OpenRouter.ai](https://openrouter.ai/) sitesine gidin
 2. Ücretsiz hesap oluşturun
 3. API anahtarınızı alın
-4. Backend'deki `.env` dosyasına ekleyin
+4. Uygulamayı başlattıktan sonra arayüzdeki kutuya yapıştırın
 
 ### Backend Kurulumu
 
@@ -70,9 +71,9 @@ pip install -r requirements.txt
 cp env.example .env
 ```
 
-5. `.env` dosyasını düzenleyin:
+5. `.env` dosyasını düzenleyin (API anahtarı artık kullanıcı arayüzden girecek):
 ```
-OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_API_KEY=dummy_key_here
 OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
 HOST=0.0.0.0
 PORT=8000
@@ -104,7 +105,7 @@ npm start
 ## Kullanım
 
 1. Tarayıcınızda `http://localhost:3000` adresine gidin
-2. OpenRouter API anahtarınızı aldığınızdan emin olun
+2. OpenRouter API anahtarınızı arayüzdeki kutuya yapıştırın
 3. Araştırma konunuzu ve amacınızı metin kutusuna yazın
 4. Çıktı dilini seçin (Türkçe veya İngilizce)
 5. PDF formatında akademik makalelerinizi yükleyin (maksimum 10 adet)
@@ -118,7 +119,7 @@ npm start
 PDF dosyalarını yüklemek için kullanılır.
 
 ### POST /generate-literature-review
-Araştırma konusu, çıktı dili ve PDF dosyaları ile literatür taraması oluşturur.
+Araştırma konusu, çıktı dili ve PDF dosyaları ile literatür taraması oluşturur. Kullanıcının API anahtarı header'da gönderilir.
 
 ## Proje Yapısı
 
@@ -161,6 +162,12 @@ Bu uygulama OpenRouter API üzerinden **Claude 3.5 Sonnet** modelini kullanır. 
 - Türkçe çıktı seçeneği
 - İngilizce çıktı seçeneği
 - Dropdown menü ile kolay seçim
+
+### Kullanıcı API Anahtarı Sistemi
+- Her kullanıcı kendi OpenRouter API anahtarını girebilir
+- API anahtarı localStorage'da saklanır
+- Her istekte kullanıcının anahtarı kullanılır
+- Güvenli ve kişiselleştirilmiş deneyim
 
 ## Katkıda Bulunma
 
