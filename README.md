@@ -71,7 +71,7 @@ pip install -r requirements.txt
 cp env.example .env
 ```
 
-5. `.env` dosyasını düzenleyin (API anahtarı artık kullanıcı arayüzden girecek):
+5. `.env` dosyasını düzenleyin (API anahtarı kullanıcı arayüzünden de girilebilir):
 ```
 OPENROUTER_API_KEY=dummy_key_here
 OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
