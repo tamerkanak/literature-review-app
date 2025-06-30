@@ -10,21 +10,24 @@ class LiteratureService:
     def __init__(self):
         self.pdf_service = PDFService()
     
-    def generate_literature_review(self, research_topic: str, pdf_texts: List[str], embeddings=None) -> str:
+    def generate_literature_review(self, research_topic: str, pdf_texts: List[str], output_language: str = "turkish", embeddings=None) -> str:
         """Generate literature review based on research topic and PDF contents"""
         try:
             # Generate literature review using OpenRouter - one paragraph per paper
-            literature_review = self._generate_with_openrouter(research_topic, pdf_texts)
+            literature_review = self._generate_with_openrouter(research_topic, pdf_texts, output_language)
             
             return literature_review
             
         except Exception as e:
             raise Exception(f"Error generating literature review: {str(e)}")
     
-    def _generate_with_openrouter(self, research_topic: str, pdf_texts: List[str]) -> str:
+    def _generate_with_openrouter(self, research_topic: str, pdf_texts: List[str], output_language: str = "turkish") -> str:
         """Generate literature review using OpenRouter API - one paragraph per paper"""
         try:
-            system_prompt = """Sen akademik literatür taraması konusunda uzman bir araştırmacısın. Görevin, verilen araştırma konusu ve akademik makaleler temelinde kapsamlı bir "Literatür Taraması" bölümü yazmaktır.
+            # Set language instruction
+            language_instruction = "Türkçe" if output_language == "turkish" else "English"
+            
+            system_prompt = f"""Sen akademik literatür taraması konusunda uzman bir araştırmacısın. Görevin, verilen araştırma konusu ve akademik makaleler temelinde kapsamlı bir "Literatür Taraması" bölümü yazmaktır.
 
 ÖNEMLİ KURALLAR:
 1. **SADECE "LİTERATÜR TARAMASI" BÖLÜMÜ**: Giriş ve Sonuç bölümleri yazma, sadece literatür taraması içeriği
@@ -32,7 +35,7 @@ class LiteratureService:
 3. **SADECE O MAKALEYE REFERANS**: Her paragrafta sadece o makaleye referans ver
 4. **APA 7 REFERANS FORMATI**: Metin içinde (Yazar, Yıl) formatında referans ver
 5. **DOĞRU REFERANSLAR**: Sadece verilen kaynaklardan referans ver, uydurma referans kullanma
-6. **MÜKEMMEL GRAMER**: Akıcı, doğru ve profesyonel Türkçe kullan
+6. **MÜKEMMEL GRAMER**: Akıcı, doğru ve profesyonel {language_instruction} kullan
 7. **AKADEMİK DİL**: Resmi, bilimsel ve profesyonel dil kullan
 8. **KRİTİK ANALİZ**: Her makalenin bulgularını analiz et, güçlü ve zayıf yönlerini belirt
 
@@ -45,7 +48,7 @@ PARAGRAF YAPISI:
 - Araştırma konusuyla ilişkisini açıkla
 
 DİL KALİTESİ:
-- Mükemmel Türkçe gramer
+- Mükemmel {language_instruction} gramer
 - Akıcı ve doğal cümle yapıları
 - Akademik terminoloji kullanımı
 - Tutarlı zaman kullanımı
@@ -61,14 +64,14 @@ DİL KALİTESİ:
 MEVCUT MAKALELER:
 {papers_context}
 
-Lütfen yukarıdaki araştırma konusu ve makaleler temelinde, SADECE "LİTERATÜR TARAMASI" bölümünü yaz. Giriş ve Sonuç bölümleri yazma.
+Lütfen yukarıdaki araştırma konusu ve makaleler temelinde, SADECE "LİTERATÜR TARAMASI" bölümünü {language_instruction} dilinde yaz. Giriş ve Sonuç bölümleri yazma.
 
 YAZIM GEREKSİNİMLERİ:
 1. **Her Makale İçin Ayrı Paragraf**: Her makale için ayrı bir paragraf yaz
 2. **Sadece O Makaleye Referans**: Her paragrafta sadece o makaleye referans ver
 3. **APA 7 Referans Formatı**: (Yazar, Yıl) şeklinde metin içi referanslar
 4. **Doğru Referanslar**: Sadece verilen kaynaklardan referans ver
-5. **Mükemmel Gramer**: Akıcı ve doğru Türkçe kullan
+5. **Mükemmel Gramer**: Akıcı ve doğru {language_instruction} kullan
 6. **Kritik Analiz**: Her makalenin bulgularını analiz et
 7. **Akademik Dil**: Profesyonel ve bilimsel üslup
 8. **Mantıklı Akış**: Paragraflar arası geçişler tutarlı olsun

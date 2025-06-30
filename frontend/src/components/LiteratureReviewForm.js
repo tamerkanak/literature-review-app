@@ -10,6 +10,7 @@ const LiteratureReviewForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [outputLanguage, setOutputLanguage] = useState('turkish');
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length + uploadedFiles.length > 10) {
@@ -59,6 +60,7 @@ const LiteratureReviewForm = () => {
       // Create FormData for file upload
       const formData = new FormData();
       formData.append('research_topic', researchTopic);
+      formData.append('output_language', outputLanguage);
       
       uploadedFiles.forEach((fileObj, index) => {
         formData.append('files', fileObj.file);
@@ -90,6 +92,22 @@ const LiteratureReviewForm = () => {
 
   return (
     <div className="literature-review-form">
+      {/* API Key Information */}
+      <div className="card info-card">
+        <h2>⚠️ Önemli Bilgi</h2>
+        <div className="info-content">
+          <p><strong>Bu uygulama OpenRouter API kullanmaktadır.</strong></p>
+          <p>Kendi API anahtarınızı almanız gerekiyor:</p>
+          <ol>
+            <li><a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer">OpenRouter.ai</a> sitesine gidin</li>
+            <li>Ücretsiz hesap oluşturun</li>
+            <li>API anahtarınızı alın</li>
+            <li>Backend'deki <code>.env</code> dosyasına <code>OPENROUTER_API_KEY=your_key_here</code> şeklinde ekleyin</li>
+          </ol>
+          <p><em>Not: Ücretsiz plan günlük belirli sayıda istek hakkı verir.</em></p>
+        </div>
+      </div>
+
       {/* Research Topic Section */}
       <div className="card">
         <h2>Araştırma Konusu</h2>
@@ -104,6 +122,24 @@ const LiteratureReviewForm = () => {
             placeholder="Örnek: Bu çalışmada, yapay zeka teknolojilerinin eğitim alanındaki uygulamalarını ve öğrenci performansına etkilerini inceleyeceğiz..."
             rows={4}
           />
+        </div>
+      </div>
+
+      {/* Output Language Selection */}
+      <div className="card">
+        <h2>Çıktı Dili</h2>
+        <div className="form-group">
+          <label className="form-label">
+            Literatür taramasının hangi dilde yazılmasını istiyorsunuz?
+          </label>
+          <select
+            className="form-control"
+            value={outputLanguage}
+            onChange={(e) => setOutputLanguage(e.target.value)}
+          >
+            <option value="turkish">Türkçe</option>
+            <option value="english">English</option>
+          </select>
         </div>
       </div>
 
@@ -193,6 +229,11 @@ const LiteratureReviewForm = () => {
           </div>
         </div>
       )}
+
+      {/* Developer Info */}
+      <div className="card developer-info">
+        <p>Geliştirici: <strong>Tamer Kanak</strong></p>
+      </div>
     </div>
   );
 };

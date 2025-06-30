@@ -2,22 +2,26 @@
 
 Bu uygulama, araştırmacıların ve öğrencilerin literatür taraması yazım sürecini kolaylaştırmak için geliştirilmiş bir web uygulamasıdır. Kullanıcılar araştırma konularını belirtebilir, PDF formatında akademik makaleler yükleyebilir ve sistem otomatik olarak bilimsel dile uygun bir literatür taraması bölümü üretir.
 
+**Geliştirici:** Tamer Kanak
+
 ## Özellikler
 
 - **PDF Yükleme**: Maksimum 10 adet PDF dosyası yükleme
 - **Metin Çıkarma**: PDF'lerden otomatik metin çıkarma
 - **Vektörleştirme**: İçerikleri vektörel hale getirme (embedding)
 - **Semantik Arama**: Cosine similarity ile benzerlik arama
-- **LLM Entegrasyonu**: OpenRouter ile Llama 3.1-8B-Instruct modeli
+- **LLM Entegrasyonu**: OpenRouter ile Claude 3.5 Sonnet modeli
 - **Akademik Format**: Bilimsel dile uygun çıktı
 - **Atıf Sistemi**: Hangi bilgilerin hangi kaynaklardan geldiğini belirtme
+- **Çok Dilli Destek**: Türkçe ve İngilizce çıktı seçeneği
+- **Her Makale İçin Ayrı Paragraf**: Her makale için ayrı analiz
 
 ## Teknolojiler
 
 ### Backend
 - **Python FastAPI**: Web framework
 - **PyMuPDF**: PDF işleme
-- **OpenRouter API**: LLM entegrasyonu (Llama 3.1-8B-Instruct)
+- **OpenRouter API**: LLM entegrasyonu (Claude 3.5 Sonnet)
 - **Sentence Transformers**: Embedding oluşturma
 - **Scikit-learn**: Cosine similarity hesaplama
 - **Uvicorn**: ASGI server
@@ -34,6 +38,12 @@ Bu uygulama, araştırmacıların ve öğrencilerin literatür taraması yazım 
 - Python 3.8+
 - Node.js 16+
 - OpenRouter API anahtarı (ücretsiz hesap)
+
+### OpenRouter API Anahtarı Alma
+1. [OpenRouter.ai](https://openrouter.ai/) sitesine gidin
+2. Ücretsiz hesap oluşturun
+3. API anahtarınızı alın
+4. Backend'deki `.env` dosyasına ekleyin
 
 ### Backend Kurulumu
 
@@ -60,10 +70,10 @@ pip install -r requirements.txt
 cp env.example .env
 ```
 
-5. `.env` dosyasını düzenleyin (API anahtarı zaten eklenmiş):
+5. `.env` dosyasını düzenleyin:
 ```
-OPENROUTER_API_KEY=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
-OPENROUTER_MODEL=meta-llama/llama-3.1-8b-instruct
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
 HOST=0.0.0.0
 PORT=8000
 FRONTEND_URL=http://localhost:3000
@@ -94,11 +104,13 @@ npm start
 ## Kullanım
 
 1. Tarayıcınızda `http://localhost:3000` adresine gidin
-2. Araştırma konunuzu ve amacınızı metin kutusuna yazın
-3. PDF formatında akademik makalelerinizi yükleyin (maksimum 10 adet)
-4. "Literatür Taraması Oluştur" butonuna tıklayın
-5. Sistem işlemi tamamladığında oluşturulan literatür taramasını görüntüleyin
-6. "Panoya Kopyala" butonu ile metni kopyalayabilirsiniz
+2. OpenRouter API anahtarınızı aldığınızdan emin olun
+3. Araştırma konunuzu ve amacınızı metin kutusuna yazın
+4. Çıktı dilini seçin (Türkçe veya İngilizce)
+5. PDF formatında akademik makalelerinizi yükleyin (maksimum 10 adet)
+6. "Literatür Taraması Oluştur" butonuna tıklayın
+7. Sistem işlemi tamamladığında oluşturulan literatür taramasını görüntüleyin
+8. "Panoya Kopyala" butonu ile metni kopyalayabilirsiniz
 
 ## API Endpoints
 
@@ -106,7 +118,7 @@ npm start
 PDF dosyalarını yüklemek için kullanılır.
 
 ### POST /generate-literature-review
-Araştırma konusu ve PDF dosyaları ile literatür taraması oluşturur.
+Araştırma konusu, çıktı dili ve PDF dosyaları ile literatür taraması oluşturur.
 
 ## Proje Yapısı
 
@@ -131,11 +143,24 @@ literature-review-app/
 
 ## LLM Modeli
 
-Bu uygulama OpenRouter API üzerinden **Llama 3.1-8B-Instruct** modelini kullanır. Bu model:
-- Açık kaynak ve ücretsiz
-- Akademik metin üretiminde başarılı
-- Türkçe ve İngilizce destekler
+Bu uygulama OpenRouter API üzerinden **Claude 3.5 Sonnet** modelini kullanır. Bu model:
+- Yüksek kaliteli akademik metin üretimi
+- Mükemmel gramer ve dil kalitesi
+- Türkçe ve İngilizce destek
 - Hızlı yanıt verir
+
+## Özellikler
+
+### Literatür Taraması Yapısı
+- Her makale için ayrı paragraf
+- Her paragrafta sadece o makaleye referans
+- APA 7 formatında atıflar
+- Kritik analiz ve sentez
+
+### Çok Dilli Destek
+- Türkçe çıktı seçeneği
+- İngilizce çıktı seçeneği
+- Dropdown menü ile kolay seçim
 
 ## Katkıda Bulunma
 
@@ -150,5 +175,7 @@ Bu uygulama OpenRouter API üzerinden **Llama 3.1-8B-Instruct** modelini kullan�
 Bu proje MIT lisansı altında lisanslanmıştır.
 
 ## İletişim
+
+**Geliştirici:** Tamer Kanak
 
 Sorularınız için issue açabilir veya pull request gönderebilirsiniz. 

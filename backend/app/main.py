@@ -59,6 +59,7 @@ async def upload_pdfs(files: List[UploadFile] = File(...)):
 @app.post("/generate-literature-review")
 async def generate_literature_review(
     research_topic: str = Form(...),
+    output_language: str = Form("turkish"),
     files: List[UploadFile] = File(...)
 ):
     """Generate literature review based on research topic and uploaded PDFs"""
@@ -79,7 +80,8 @@ async def generate_literature_review(
         # Generate literature review
         literature_review = literature_service.generate_literature_review(
             research_topic=research_topic,
-            pdf_texts=pdf_texts
+            pdf_texts=pdf_texts,
+            output_language=output_language
         )
         
         return LiteratureReviewResponse(
