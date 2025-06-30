@@ -227,4 +227,34 @@
   .file-size {
     margin: 0;
   }
+}
+
+.api-key-input-group {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.api-key-input-group label {
+  font-size: 0.95rem;
+  color: #856404;
+  font-weight: 500;
+}
+
+.api-key-input {
+  padding: 8px 12px;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #fffbe6;
+  color: #856404;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.api-key-input:focus {
+  border-color: #ff9800;
+  background-color: #fff8e1;
 } 

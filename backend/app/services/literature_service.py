@@ -1,5 +1,5 @@
 import requests
-from typing import List, Dict
+from typing import List, Dict, Optional
 import os
 from .pdf_service import PDFService
 
@@ -10,18 +10,18 @@ class LiteratureService:
     def __init__(self):
         self.pdf_service = PDFService()
     
-    def generate_literature_review(self, research_topic: str, pdf_texts: List[str], output_language: str = "turkish", embeddings=None) -> str:
+    def generate_literature_review(self, research_topic: str, pdf_texts: List[str], output_language: str = "turkish", api_key: Optional[str] = None, embeddings=None) -> str:
         """Generate literature review based on research topic and PDF contents"""
         try:
             # Generate literature review using OpenRouter - one paragraph per paper
-            literature_review = self._generate_with_openrouter(research_topic, pdf_texts, output_language)
+            literature_review = self._generate_with_openrouter(research_topic, pdf_texts, output_language, api_key)
             
             return literature_review
             
         except Exception as e:
             raise Exception(f"Error generating literature review: {str(e)}")
     
-    def _generate_with_openrouter(self, research_topic: str, pdf_texts: List[str], output_language: str = "turkish") -> str:
+    def _generate_with_openrouter(self, research_topic: str, pdf_texts: List[str], output_language: str = "turkish", api_key: Optional[str] = None) -> str:
         """Generate literature review using OpenRouter API - one paragraph per paper"""
         try:
             # Set language instruction
@@ -85,8 +85,11 @@ PARAGRAF İÇERİĞİ:
 
 LİTERATÜR TARAMASI:"""
             
+            # API anahtarı önceliği: parametre > .env
+            api_key_to_use = api_key if api_key else OPENROUTER_API_KEY
+            
             headers = {
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                "Authorization": f"Bearer {api_key_to_use}",
                 "Content-Type": "application/json"
             }
             

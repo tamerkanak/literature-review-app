@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import './LiteratureReviewForm.css';
@@ -11,6 +11,20 @@ const LiteratureReviewForm = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [outputLanguage, setOutputLanguage] = useState('turkish');
+  const [apiKey, setApiKey] = useState('');
+
+  // API anahtarını localStorage'dan yükle
+  useEffect(() => {
+    const storedKey = localStorage.getItem('openrouter_api_key') || '';
+    setApiKey(storedKey);
+  }, []);
+
+  // API anahtarı değişince localStorage'a kaydet
+  useEffect(() => {
+    if (apiKey) {
+      localStorage.setItem('openrouter_api_key', apiKey);
+    }
+  }, [apiKey]);
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length + uploadedFiles.length > 10) {
@@ -42,36 +56,35 @@ const LiteratureReviewForm = () => {
   };
 
   const generateLiteratureReview = async () => {
+    if (!apiKey.trim()) {
+      setError('Lütfen OpenRouter API anahtarınızı girin.');
+      return;
+    }
     if (!researchTopic.trim()) {
       setError('Lütfen araştırma konunuzu girin.');
       return;
     }
-
     if (uploadedFiles.length === 0) {
       setError('Lütfen en az bir PDF dosyası yükleyin.');
       return;
     }
-
     setIsLoading(true);
     setError('');
     setSuccess('');
-
     try {
       // Create FormData for file upload
       const formData = new FormData();
       formData.append('research_topic', researchTopic);
       formData.append('output_language', outputLanguage);
-      
-      uploadedFiles.forEach((fileObj, index) => {
+      uploadedFiles.forEach((fileObj) => {
         formData.append('files', fileObj.file);
       });
-
       const response = await axios.post('/generate-literature-review', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'x-openrouter-api-key': apiKey
         },
       });
-
       setLiteratureReview(response.data.literature_review);
       setSuccess('Literatür taraması başarıyla oluşturuldu!');
     } catch (err) {
@@ -102,12 +115,23 @@ const LiteratureReviewForm = () => {
             <li><a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer">OpenRouter.ai</a> sitesine gidin</li>
             <li>Ücretsiz hesap oluşturun</li>
             <li>API anahtarınızı alın</li>
-            <li>Backend'deki <code>.env</code> dosyasına <code>OPENROUTER_API_KEY=your_key_here</code> şeklinde ekleyin</li>
+            <li>Aşağıdaki kutuya yapıştırın</li>
           </ol>
           <p><em>Not: Ücretsiz plan günlük belirli sayıda istek hakkı verir.</em></p>
         </div>
+        <div className="api-key-input-group">
+          <label htmlFor="api-key-input">OpenRouter API Anahtarınız:</label>
+          <input
+            id="api-key-input"
+            type="text"
+            className="form-control api-key-input"
+            value={apiKey}
+            onChange={e => setApiKey(e.target.value)}
+            placeholder="sk-or-..."
+            autoComplete="off"
+          />
+        </div>
       </div>
-
       {/* Research Topic Section */}
       <div className="card">
         <h2>Araştırma Konusu</h2>
@@ -124,7 +148,6 @@ const LiteratureReviewForm = () => {
           />
         </div>
       </div>
-
       {/* Output Language Selection */}
       <div className="card">
         <h2>Çıktı Dili</h2>
@@ -142,14 +165,12 @@ const LiteratureReviewForm = () => {
           </select>
         </div>
       </div>
-
       {/* File Upload Section */}
       <div className="card">
         <h2>PDF Dosyaları Yükle</h2>
         <p className="upload-info">
           Literatür taraması yapmak istediğiniz akademik makaleleri yükleyin (maksimum 10 dosya)
         </p>
-        
         <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
           <input {...getInputProps()} />
           {isDragActive ? (
@@ -158,7 +179,6 @@ const LiteratureReviewForm = () => {
             <p>PDF dosyalarını sürükleyip bırakın veya seçmek için tıklayın</p>
           )}
         </div>
-
         {/* Uploaded Files List */}
         {uploadedFiles.length > 0 && (
           <div className="uploaded-files">
@@ -181,38 +201,33 @@ const LiteratureReviewForm = () => {
           </div>
         )}
       </div>
-
       {/* Generate Button */}
       <div className="card">
         <button
           className="btn btn-primary"
           onClick={generateLiteratureReview}
-          disabled={isLoading || uploadedFiles.length === 0 || !researchTopic.trim()}
+          disabled={isLoading || uploadedFiles.length === 0 || !researchTopic.trim() || !apiKey.trim()}
         >
           {isLoading ? 'Literatür Taraması Oluşturuluyor...' : 'Literatür Taraması Oluştur'}
         </button>
       </div>
-
       {/* Alerts */}
       {error && (
         <div className="alert alert-error">
           {error}
         </div>
       )}
-      
       {success && (
         <div className="alert alert-success">
           {success}
         </div>
       )}
-
       {/* Loading Spinner */}
       {isLoading && (
         <div className="loading">
           <div className="spinner"></div>
         </div>
       )}
-
       {/* Literature Review Result */}
       {literatureReview && (
         <div className="card">
@@ -229,7 +244,6 @@ const LiteratureReviewForm = () => {
           </div>
         </div>
       )}
-
       {/* Developer Info */}
       <div className="card developer-info">
         <p>Geliştirici: <strong>Tamer Kanak</strong></p>

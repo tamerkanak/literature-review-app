@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
@@ -58,6 +58,7 @@ async def upload_pdfs(files: List[UploadFile] = File(...)):
 
 @app.post("/generate-literature-review")
 async def generate_literature_review(
+    request: Request,
     research_topic: str = Form(...),
     output_language: str = Form("turkish"),
     files: List[UploadFile] = File(...)
@@ -77,11 +78,15 @@ async def generate_literature_review(
             text = pdf_service.extract_text_from_pdf(content)
             pdf_texts.append(text)
         
+        # Kullanıcıdan gelen API anahtarını header'dan al
+        api_key = request.headers.get('x-openrouter-api-key')
+        
         # Generate literature review
         literature_review = literature_service.generate_literature_review(
             research_topic=research_topic,
             pdf_texts=pdf_texts,
-            output_language=output_language
+            output_language=output_language,
+            api_key=api_key
         )
         
         return LiteratureReviewResponse(
